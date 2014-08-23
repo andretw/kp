@@ -5,6 +5,7 @@ function MainCtrl($scope, $timeout) {
     var pre_selected_photo_index = null;
     var selected_photo = null;
     var pass = 0;
+    var lock = 0;
 
     $scope.num_of_pass = 0;
     $scope.num_of_wrong = 0;
@@ -13,7 +14,12 @@ function MainCtrl($scope, $timeout) {
     $scope.to_next = false;
     $scope.is_loading = false;
 
-    $scope.guest = function(photo_url, index){
+    $scope.guess = function(photo_url, index){
+        if(lock==2){
+            return;
+        }else{
+            lock++;
+        }
         console.log("index", index);
         $scope.show[index] = true;
         if(selected_photo==null){
@@ -23,6 +29,7 @@ function MainCtrl($scope, $timeout) {
             console.log("congrats");
             selected_photo = null;
             pass++;
+            lock = 0;
             if(pass==3){
                 $scope.num_of_pass++;
                 $scope.to_next = true;
@@ -37,6 +44,7 @@ function MainCtrl($scope, $timeout) {
                 console.log("hide two", pre_selected_photo_index, index);
                 $scope.show[pre_selected_photo_index] = false;
                 $scope.show[index] = false;
+                lock = 0;
             }, 700);
 
         }

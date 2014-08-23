@@ -61,7 +61,7 @@
           <div class="inner cover" ng-show="!is_loading">
               <div class="myimg" ng-repeat="photo_url in photos track by $index">
                   <span ng-show="show[$index]"><img src="{{photo_url}}"/></span>
-                  <span ng-click="guest(photo_url, $index)" ng-show="!show[$index]"><img src="./kp.png"/></span>
+                  <span ng-click="guess(photo_url, $index)" ng-show="!show[$index]"><img src="./kp.png"/></span>
               </div>
           </div>
 
