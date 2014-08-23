@@ -47,7 +47,7 @@
               <ul class="nav masthead-nav">
                 <li class="active"><a href="#">錯 {{ num_of_wrong }} 次</a></li>
                 <li class="active"><a href="#">過 {{ num_of_pass }} 關</a></li>
-                <li class="active"><button type="button" class="btn btn-default" ng-click="init()">下一關</button></li>
+                <li class="active"><button type="button" class="btn btn-default" ng-click="init()" ng-class="{disabled: !to_next}">下一關</button></li>
               </ul>
             </div>
           </div>

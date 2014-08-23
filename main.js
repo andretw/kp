@@ -10,6 +10,7 @@ function MainCtrl($scope, $timeout) {
     $scope.num_of_wrong = 0;
     $scope.photos = [];
     $scope.show = [];
+    $scope.to_next = false;
 
     $scope.guest = function(photo_url, index){
         console.log("index", index);
@@ -23,6 +24,7 @@ function MainCtrl($scope, $timeout) {
             pass++;
             if(pass==3){
                 $scope.num_of_pass++;
+                $scope.to_next = true;
                 pass = 0;
             }
         }else{
@@ -124,6 +126,7 @@ function MainCtrl($scope, $timeout) {
     $scope.init = function(){
         getAlbums();
         showAll();
+        $scope.to_next = false;
     }
 
     $scope.init();
