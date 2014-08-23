@@ -11,6 +11,7 @@ function MainCtrl($scope, $timeout) {
     $scope.photos = [];
     $scope.show = [];
     $scope.to_next = false;
+    $scope.is_loading = false;
 
     $scope.guest = function(photo_url, index){
         console.log("index", index);
@@ -71,6 +72,7 @@ function MainCtrl($scope, $timeout) {
                           $scope.photos[i] = photo_url;
                       }
                       console.log("photos", $scope.photos);
+                      $scope.is_loading = false;
                       $timeout(hideAll, 3000 - $scope.num_of_pass * 100);
                       $scope.$apply();
 
@@ -124,6 +126,7 @@ function MainCtrl($scope, $timeout) {
     }
 
     $scope.init = function(){
+        $scope.is_loading = true;
         getAlbums();
         showAll();
         $scope.to_next = false;
