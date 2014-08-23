@@ -63,6 +63,8 @@ body {
     margin: 20px;
     width: 150px;
     height: 150px;
+    border: 1px;
+    border-color: #000;
 }
 
 /*
