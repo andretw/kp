@@ -1,6 +1,23 @@
 "use strict"
-function MainCtrl($scope, $timeout) {
+
+var app = angular.module('myApp', []);
+
+app.directive('imageonload', function($log) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            element.bind('load', function() {
+                $log.debug('loaded');
+                scope.$emit('onImageLoaded');
+            });
+        }
+    };
+});
+
+app.controller('MainCtrl', function($scope, $timeout, $log) {
     var API_KEY = "kp53f70d2f150798.04074610";
+    var HIDE_MILLISECONDS = 3000;
+
     var numbers = []
     var pre_selected_photo_index = null;
     var selected_photo = null;
@@ -13,6 +30,24 @@ function MainCtrl($scope, $timeout) {
     $scope.show = [];
     $scope.to_next = false;
     $scope.is_loading = false;
+    $scope.num_of_loaded = 0;
+
+    $scope.$on('onImageLoaded', function(){
+        $scope.num_of_loaded++;
+        if($scope.num_of_loaded == 6){
+            $log.debug('AllImageLoaded');
+            $scope.is_loading = false;
+
+            var hide_milliseconds = HIDE_MILLISECONDS - $scope.num_of_pass * 100;
+            if(hide_milliseconds<0){
+                hide_milliseconds = 0;
+            }
+            $scope.num_of_loaded = 0;
+            $scope.$apply();
+
+            $timeout(hideAll, hide_milliseconds);
+        }
+    });
 
     $scope.guess = function(photo_url, index){
         if(lock==2){
@@ -20,13 +55,13 @@ function MainCtrl($scope, $timeout) {
         }else{
             lock++;
         }
-        console.log("index", index);
+        $log.debug("index", index);
         $scope.show[index] = true;
         if(selected_photo==null){
             selected_photo = photo_url;
             pre_selected_photo_index = index;
         }else if(selected_photo==photo_url){
-            console.log("congrats");
+            $log.debug("congrats");
             selected_photo = null;
             pass++;
             lock = 0;
@@ -36,12 +71,12 @@ function MainCtrl($scope, $timeout) {
                 pass = 0;
             }
         }else{
-            console.log("wrong");
+            $log.debug("wrong");
             $scope.num_of_wrong++;
             selected_photo = null;
 
             $timeout(function(){
-                console.log("hide two", pre_selected_photo_index, index);
+                $log.debug("hide two", pre_selected_photo_index, index);
                 $scope.show[pre_selected_photo_index] = false;
                 $scope.show[index] = false;
                 lock = 0;
@@ -54,7 +89,7 @@ function MainCtrl($scope, $timeout) {
         $.ajax({
               url: "http://api.kptaipei.tw/v1/albums/?accessToken="+API_KEY,
               success: function(resp){
-                  console.log("albums", resp);
+                  $log.debug("albums", resp);
                   var rand = getRand(0, resp.pageInfo.totalResults-1);
                   var album_id = resp.data[rand].id;
                   getPhotosInAlbum(album_id);
@@ -70,18 +105,16 @@ function MainCtrl($scope, $timeout) {
                   if(resp.pageInfo.totalResults > 3){
 
                       numbers = getRands(0, resp.pageInfo.totalResults-1, 3);
-                      console.log("numbers", numbers);
+                      $log.debug("numbers", numbers);
                       numbers = numbers.concat(numbers);
-                      console.log("numbers double", numbers);
+                      $log.debug("numbers double", numbers);
 
                       var shuffled_numbers = shuffle(numbers);
                       for(var i=0; i<shuffled_numbers.length; i++){
                           var photo_url = resp.data.photos[shuffled_numbers[i]].images.large_square;
                           $scope.photos[i] = photo_url;
                       }
-                      console.log("photos", $scope.photos);
-                      $scope.is_loading = false;
-                      $timeout(hideAll, 3000 - $scope.num_of_pass * 100);
+                      $log.debug("photos", $scope.photos);
                       $scope.$apply();
 
                   }
@@ -141,4 +174,4 @@ function MainCtrl($scope, $timeout) {
     }
 
     $scope.init();
-}
+});
