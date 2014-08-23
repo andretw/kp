@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html ng-app>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="柯p挑戰">
+    <meta name="author" content="andretw">
+
+    <title>柯p挑戰</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="main.css" rel="stylesheet">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
+    <script src="./jsTimeWatch.min.js"></script>
+    <script src="./main.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body ng-controller="MainCtrl" ng-cloak class="ng-cloak">
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">柯p挑戰</h3>
+              <ul class="nav masthead-nav">
+                <li class="active"><a href="#">錯 {{ num_of_wrong }} 次</a></li>
+                <li class="active"><a href="#">過 {{ num_of_pass }} 關</a></li>
+                <li class="active"><button type="button" class="btn btn-default" ng-click="init()">下一關</button></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="inner cover">
+              <div class="myimg" ng-repeat="photo_url in photos track by $index">
+                  <span ng-show="show[$index]"><img src="{{photo_url}}"/></span>
+                  <span ng-click="guest(photo_url, $index)" ng-show="!show[$index]"><img src="./kp.png"/></span>
+              </div>
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>by andretw 2014</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </body>
+</html>
