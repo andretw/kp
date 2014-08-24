@@ -24,6 +24,7 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
     var pass = 0;
     var lock = 0;
 
+    $scope.num_of_total_hearts = 10;
     $scope.num_of_pass = 0;
     $scope.num_of_wrong = 0;
     $scope.photos = [];
@@ -40,7 +41,7 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
 
             var hide_milliseconds = HIDE_MILLISECONDS - $scope.num_of_pass * 100;
             if(hide_milliseconds<0){
-                hide_milliseconds = 0;
+                hide_milliseconds = 100;
             }
             $scope.num_of_loaded = 0;
             $scope.$apply();
@@ -74,6 +75,12 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
             $log.debug("wrong");
             $scope.num_of_wrong++;
             selected_photo = null;
+
+
+            if($scope.num_of_wrong == $scope.num_of_total_hearts){
+                $scope.is_failed = true;
+                return;
+            }
 
             $timeout(function(){
                 $log.debug("hide two", pre_selected_photo_index, index);
@@ -164,6 +171,11 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
 
     var hideAll = function(){
         $scope.show = [false, false, false, false, false, false];
+    }
+
+
+    $scope.getNumber = function(num) {
+        return new Array(num);
     }
 
     $scope.init = function(){

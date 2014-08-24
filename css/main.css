@@ -125,6 +125,12 @@ body {
   font-weight: bold;
 }
 
+#myFailed {
+  -vendor-animation-duration: 3s;
+  -vendor-animation-delay: 2s;
+  -vendor-animation-iteration-count: infinite;
+}
+
 
 /*
  * Footer

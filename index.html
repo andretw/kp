@@ -15,16 +15,18 @@
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="main.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/animate.min.css" />
+    <link href="./css/main.css" rel="stylesheet">
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
-    <script src="./jsTimeWatch.min.js"></script>
-    <script src="./main.js"></script>
+    <script src="./js/jsTimeWatch.min.js"></script>
+    <script src="./js/main.js"></script>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -47,21 +49,25 @@
             <div class="inner">
               <h3 class="masthead-brand">柯p挑戰</h3>
               <ul class="nav masthead-nav">
-                <li class="active"><a href="#">錯 {{ num_of_wrong }} 次</a></li>
+                <li class="active"><i class="fa fa-heart-o" ng-repeat="i in getNumber(num_of_wrong) track by $index"></i><i class="fa fa-heart" ng-repeat="i in getNumber(num_of_total_hearts-num_of_wrong) track by $index"></i></li>
                 <li class="active"><a href="#">過 {{ num_of_pass }} 關</a></li>
                 <li class="active"><button type="button" class="btn btn-default" ng-click="init()" ng-class="{disabled: !to_next}">下一關</button></li>
               </ul>
             </div>
           </div>
 
-          <div class="inner cover" ng-show="is_loading">
-              <img src="./ajax-loader.gif" />
+          <div id="myFailed" ng-show="is_failed" ng-class="{'animated rubberBand': is_failed}">
+              <img src="./img/donut.png" />
           </div>
 
-          <div class="inner cover" ng-show="!is_loading">
+          <div class="inner cover" ng-show="is_loading && !is_failed">
+              <img src="./img/ajax-loader.gif" />
+          </div>
+
+          <div class="inner cover" ng-show="!is_loading && !is_failed">
               <div class="myimg" ng-repeat="photo_url in photos track by $index">
                   <span ng-show="show[$index]"><img ng-src="{{photo_url}}" imageonload/></span>
-                  <span ng-click="guess(photo_url, $index)" ng-show="!show[$index]"><img src="./kp.png"/></span>
+                  <span ng-click="guess(photo_url, $index)" ng-show="!show[$index]"><img src="./img/kp.png"/></span>
               </div>
           </div>
 
