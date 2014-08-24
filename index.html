@@ -48,8 +48,10 @@
           <div class="masthead clearfix">
             <div class="inner">
               <h3 class="masthead-brand">柯p挑戰</h3>
+
               <ul class="nav masthead-nav">
                 <li class="active"><i class="fa fa-heart-o" ng-repeat="i in getNumber(num_of_wrong) track by $index"></i><i class="fa fa-heart" ng-repeat="i in getNumber(num_of_total_hearts-num_of_wrong) track by $index"></i></li>
+                <li class="active"><div id="timer"><span class="value">00:00:00.000</span></div></li>
                 <li class="active"><a href="#">過 {{ num_of_pass }} 關</a></li>
                 <li class="active"><button type="button" class="btn btn-default" ng-click="init()" ng-class="{disabled: !to_next}">下一關</button></li>
               </ul>

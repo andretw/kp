@@ -17,6 +17,7 @@ app.directive('imageonload', function($log) {
 app.controller('MainCtrl', function($scope, $timeout, $log) {
     var API_KEY = "kp53f70d2f150798.04074610";
     var HIDE_MILLISECONDS = 3000;
+    var AUTO_NEXT_MILLISECONDS = 2000;
 
     var numbers = []
     var pre_selected_photo_index = null;
@@ -32,6 +33,7 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
     $scope.to_next = false;
     $scope.is_loading = false;
     $scope.num_of_loaded = 0;
+    $scope.auto_next_enabled = false;
 
     $scope.$on('onImageLoaded', function(){
         $scope.num_of_loaded++;
@@ -45,6 +47,7 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
             }
             $scope.num_of_loaded = 0;
             $scope.$apply();
+            startTimer();
 
             $timeout(hideAll, hide_milliseconds);
         }
@@ -70,6 +73,12 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
                 $scope.num_of_pass++;
                 $scope.to_next = true;
                 pass = 0;
+
+                stopTimer();
+
+                if($scope.auto_next_enabled){
+                    $timeout($scope.init, AUTO_NEXT_MILLISECONDS);
+                }
             }
         }else{
             $log.debug("wrong");
@@ -184,6 +193,39 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
         showAll();
         $scope.to_next = false;
     }
+
+
+    // timer
+    var stopWatch = new jtl.stopWatch();
+
+    function startTimer() {
+        if(stopWatch.start()!=null){
+            stopWatch.executeOnRefresh(refresh);
+            var value= stopWatch.splittime();
+            $('#timer').find('.value').text(toTime(value));
+        }
+    }
+
+    function stopTimer(){
+    	var value = stopWatch.stoptime();
+    	if(value==null)return;
+    	$('#timer').find('.value').text(toTime(value));
+        $('#start_button').removeClass('disabled');
+        //stopWatch.resettime();
+    }
+
+
+    function toTime(_time){
+    	if(_time==null)return '';
+    	if(_time.negative)return ('-'+_time.hh+':'+_time.mm+':'+_time.ss+'.'+_time.ms);
+     	return (_time.hh+':'+_time.mm+':'+_time.ss+'.'+_time.ms);
+    }
+
+    function refresh(){
+    	var value= stopWatch.splittime();
+    	if (value!=null) $('#timer').find('.value').text(toTime(value));
+    }
+    // timer
 
     $scope.init();
 });
