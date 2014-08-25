@@ -63,6 +63,9 @@
           </div>
 
           <div class="inner cover" ng-show="is_loading && !is_failed">
+              <div id="levelup" ng-show="is_leveled_up" ng-class="{'animated rubberBand': is_leveled_up}">
+                  Level Up <i class="fa fa-level-up fa-5"></i>
+              </div>
               <img src="./img/ajax-loader.gif" />
           </div>
 

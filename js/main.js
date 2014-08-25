@@ -16,17 +16,23 @@ app.directive('imageonload', function($log) {
 
 app.controller('MainCtrl', function($scope, $timeout, $log) {
     var API_KEY = "kp53f70d2f150798.04074610";
-    var HIDE_MILLISECONDS = 3000;
+    var HIDE_MILLISECONDS = 2500;
     var AUTO_NEXT_MILLISECONDS = 2000;
+    var NUM_OF_SET = 3;
+
+    // TO-DO: NUM_OF_SET_MATCH only can be changed if added more pre_selected_photo
+    var NUM_OF_SET_MATCH = 2;
+
+    var NUM_OF_PASS_FOR_ADDING_HEART = 4;
+    var REDUCE_MILLISECONDS = 50;
+    var MIN_SHOW_MILLISECONDS = 100;
+    var INCREASE_LEVEL_AFTER_PASS = 5;
 
     var numbers = []
     var pre_selected_photo_index = null;
     var selected_photo = null;
     var pass = 0;
     var lock = 0;
-    var number_of_set = 3;
-    var number_of_set_match = 2;
-    var number_of_pass_for_add_heart = 4;
 
     $scope.num_of_total_hearts = 1;
     $scope.num_of_pass = 0;
@@ -37,16 +43,18 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
     $scope.is_loading = false;
     $scope.num_of_loaded = 0;
     $scope.auto_next_enabled = false;
+    $scope.is_leveled_up = false;
 
     $scope.$on('onImageLoaded', function(){
         $scope.num_of_loaded++;
-        if($scope.num_of_loaded == 6){
+        if($scope.num_of_loaded == NUM_OF_SET*NUM_OF_SET_MATCH){
             $log.debug('AllImageLoaded');
             $scope.is_loading = false;
+            $scope.is_leveled_up = false;
 
-            var hide_milliseconds = HIDE_MILLISECONDS - $scope.num_of_pass * 100;
+            var hide_milliseconds = HIDE_MILLISECONDS - $scope.num_of_pass * REDUCE_MILLISECONDS;
             if(hide_milliseconds<0){
-                hide_milliseconds = 100;
+                hide_milliseconds = MIN_SHOW_MILLISECONDS;
             }
             $scope.num_of_loaded = 0;
             $scope.$apply();
@@ -57,7 +65,7 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
     });
 
     $scope.guess = function(photo_url, index){
-        if(lock==number_of_set_match){
+        if(lock==NUM_OF_SET_MATCH){
             return;
         }else{
             lock++;
@@ -73,7 +81,7 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
             pass++;
             lock = 0;
 
-            if(pass==number_of_set){
+            if(pass==NUM_OF_SET){
                 $scope.num_of_pass++;
                 $scope.to_next = true;
                 pass = 0;
@@ -81,8 +89,14 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
                 stopTimer();
 
                 // add heart
-                if($scope.num_of_pass%number_of_pass_for_add_heart==0){
+                if($scope.num_of_pass%NUM_OF_PASS_FOR_ADDING_HEART==0){
                     $scope.num_of_total_hearts++;
+                }
+
+                // increase level
+                if($scope.num_of_pass%INCREASE_LEVEL_AFTER_PASS==0){
+                    $scope.is_leveled_up = true;
+                    NUM_OF_SET++;
                 }
 
                 // auto next
@@ -98,6 +112,7 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
 
             if($scope.num_of_wrong == $scope.num_of_total_hearts){
                 $scope.is_failed = true;
+                stopTimer();
                 return;
             }
 
@@ -128,11 +143,20 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
         $.ajax({
               url: "http://api.kptaipei.tw/v1/albums/"+album_id+"?accessToken="+API_KEY,
               success: function(resp){
-                  if(resp.pageInfo.totalResults > number_of_set){
+                  if(resp.pageInfo.totalResults > NUM_OF_SET){
 
-                      numbers = getRands(0, resp.pageInfo.totalResults-1, number_of_set);
+                      numbers = getRands(0, resp.pageInfo.totalResults-1, NUM_OF_SET);
                       $log.debug("numbers", numbers);
-                      numbers = numbers.concat(numbers);
+
+                      var temp_numbers = [];
+                      for(var i=0; i<NUM_OF_SET_MATCH-1; i++){
+                          temp_numbers[i] = numbers;
+                      }
+
+                      for(var i=0; i<NUM_OF_SET_MATCH-1; i++){
+                          numbers = numbers.concat(temp_numbers[i]);
+                      }
+
                       $log.debug("numbers double", numbers);
 
                       var shuffled_numbers = shuffle(numbers);
@@ -185,13 +209,13 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
     }
 
     var showAll = function(){
-        for(var i=0; i< number_of_set*number_of_set_match; i++){
+        for(var i=0; i< NUM_OF_SET*NUM_OF_SET_MATCH; i++){
             $scope.show[i] = true;
         }
     }
 
     var hideAll = function(){
-        for(var i=0; i< number_of_set*number_of_set_match; i++){
+        for(var i=0; i< NUM_OF_SET*NUM_OF_SET_MATCH; i++){
             $scope.show[i] = false;
         }
     }

@@ -133,6 +133,10 @@ body {
   -vendor-animation-iteration-count: infinite;
 }
 
+#levelup {
+  font-size: 40px;
+  color: rgb(230, 61, 108);
+}
 
 /*
  * Footer
