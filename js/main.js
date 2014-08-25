@@ -28,7 +28,7 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
     var number_of_set_match = 2;
     var number_of_pass_for_add_heart = 4;
 
-    $scope.num_of_total_hearts = 3;
+    $scope.num_of_total_hearts = 1;
     $scope.num_of_pass = 0;
     $scope.num_of_wrong = 0;
     $scope.photos = [];
