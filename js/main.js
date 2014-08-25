@@ -25,6 +25,7 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
     var pass = 0;
     var lock = 0;
     var number_of_set = 3;
+    var number_of_set_match = 2;
     var number_of_pass_for_add_heart = 4;
 
     $scope.num_of_total_hearts = 3;
@@ -56,7 +57,7 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
     });
 
     $scope.guess = function(photo_url, index){
-        if(lock==2){
+        if(lock==number_of_set_match){
             return;
         }else{
             lock++;
@@ -184,11 +185,15 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
     }
 
     var showAll = function(){
-        $scope.show = [true, true, true, true, true, true];
+        for(var i=0; i< number_of_set*number_of_set_match; i++){
+            $scope.show[i] = true;
+        }
     }
 
     var hideAll = function(){
-        $scope.show = [false, false, false, false, false, false];
+        for(var i=0; i< number_of_set*number_of_set_match; i++){
+            $scope.show[i] = false;
+        }
     }
 
 
