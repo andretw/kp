@@ -24,8 +24,10 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
     var selected_photo = null;
     var pass = 0;
     var lock = 0;
+    var number_of_set = 3;
+    var number_of_pass_for_add_heart = 4;
 
-    $scope.num_of_total_hearts = 10;
+    $scope.num_of_total_hearts = 3;
     $scope.num_of_pass = 0;
     $scope.num_of_wrong = 0;
     $scope.photos = [];
@@ -69,13 +71,20 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
             selected_photo = null;
             pass++;
             lock = 0;
-            if(pass==3){
+
+            if(pass==number_of_set){
                 $scope.num_of_pass++;
                 $scope.to_next = true;
                 pass = 0;
 
                 stopTimer();
 
+                // add heart
+                if($scope.num_of_pass%number_of_pass_for_add_heart==0){
+                    $scope.num_of_total_hearts++;
+                }
+
+                // auto next
                 if($scope.auto_next_enabled){
                     $timeout($scope.init, AUTO_NEXT_MILLISECONDS);
                 }
@@ -118,9 +127,9 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
         $.ajax({
               url: "http://api.kptaipei.tw/v1/albums/"+album_id+"?accessToken="+API_KEY,
               success: function(resp){
-                  if(resp.pageInfo.totalResults > 3){
+                  if(resp.pageInfo.totalResults > number_of_set){
 
-                      numbers = getRands(0, resp.pageInfo.totalResults-1, 3);
+                      numbers = getRands(0, resp.pageInfo.totalResults-1, number_of_set);
                       $log.debug("numbers", numbers);
                       numbers = numbers.concat(numbers);
                       $log.debug("numbers double", numbers);
