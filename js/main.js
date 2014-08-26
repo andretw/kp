@@ -225,6 +225,10 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
         return new Array(num);
     }
 
+    $scope.goto = function(url){
+        location.href = url;
+    }
+
     $scope.init = function(){
         $scope.is_loading = true;
         getAlbums();

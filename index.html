@@ -68,8 +68,8 @@
             </div>
           </div>
 
-          <div id="myFailed" ng-show="is_failed" ng-class="{'animated rubberBand': is_failed}">
-              <img src="./img/donut.png" />
+          <div id="myFailed" ng-show="is_failed" ng-class="{'animated rubberBand': is_failed}" ng-click="goto('./')">
+              <img src="./img/donut.png" alt="再吃一個?"/>
           </div>
 
           <div class="inner cover" ng-show="is_loading && !is_failed">
