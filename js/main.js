@@ -34,7 +34,7 @@ app.controller('MainCtrl', function($scope, $timeout, $log) {
     var pass = 0;
     var lock = 0;
 
-    $scope.num_of_total_hearts = 1;
+    $scope.num_of_total_hearts = 2;
     $scope.num_of_pass = 0;
     $scope.num_of_wrong = 0;
     $scope.photos = [];
